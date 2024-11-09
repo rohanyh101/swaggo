@@ -1,0 +1,251 @@
+basePath: /api/v1
+definitions:
+  models.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      first_name:
+        maxLength: 100
+        minLength: 2
+        type: string
+      id:
+        type: string
+      last_name:
+        maxLength: 100
+        minLength: 2
+        type: string
+      password:
+        maxLength: 100
+        minLength: 2
+        type: string
+      role:
+        type: string
+      token:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    - role
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is a sample server Petstore server.
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: log in a user
+      parameters:
+      - description: User log in request
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: 'error": "email or password is incorrect'
+          schema:
+            type: string
+        "500":
+          description: 'error": "email or password is incorrect'
+          schema:
+            type: string
+      summary: user log in
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: sign up a user
+      parameters:
+      - description: User sign up request
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User created successfully
+          schema:
+            type: string
+        "400":
+          description: 'error": "email or password is incorrect'
+          schema:
+            type: string
+        "500":
+          description: 'error": "Error occurred while checking for email'
+          schema:
+            type: string
+      summary: user sign up
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: Health check endpoint to see if the server is running
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Health check
+      tags:
+      - Health
+  /profile:
+    delete:
+      consumes:
+      - application/json
+      description: delete a user
+      parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User deleted successfully
+          schema:
+            type: string
+        "400":
+          description: 'error": "UnAuthenticated to access this resource'
+          schema:
+            type: string
+        "404":
+          description: 'error": "User not found'
+          schema:
+            type: string
+        "500":
+          description: 'error": "Error occurred while deleting user'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: delete a user profile
+    get:
+      consumes:
+      - application/json
+      description: get a user
+      parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User profile
+          schema:
+            type: string
+        "400":
+          description: 'error": "UnAuthenticated to access this resource'
+          schema:
+            type: string
+        "404":
+          description: 'error": "User not found'
+          schema:
+            type: string
+        "500":
+          description: 'error": "Error occurred while fetching user'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: get a user profile
+    put:
+      consumes:
+      - application/json
+      description: update a user
+      parameters:
+      - description: User update request
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User updated successfully
+          schema:
+            type: string
+        "400":
+          description: 'error": "UnAuthenticated to access this resource'
+          schema:
+            type: string
+        "404":
+          description: 'error": "User not found'
+          schema:
+            type: string
+        "500":
+          description: 'error": "Error occurred while updating user'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: update a user profile
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: get all users
+      parameters:
+      - description: Bearer {token}
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'error": "no users available'
+          schema:
+            type: string
+        "400":
+          description: 'error": "UnAuthenticated to access this resource'
+          schema:
+            type: string
+        "500":
+          description: 'error": "Error occurred while listing users'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: get all users (ADMIN privilege required)
+swagger: "2.0"
